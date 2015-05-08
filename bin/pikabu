@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'pikabu'
+require "pry"
+require "Open3" 
 
-Pikabu.new("/Users/dananajjar/pikabu/user_script.rb", 3)
+Pikabu.new(ARGV[0], ARGV[1])
