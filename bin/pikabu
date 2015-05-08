@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'pikabu'
+
+Pikabu.new("/Users/dananajjar/pikabu/user_script.rb", 3)
