@@ -10,9 +10,10 @@ class Pikabu
     @file_path = file_path
     @file = File.open(@file_path)
     @length = File.readlines(@file_path).size
-    @t = Tempfile.new("temp")
-    pwd = FileUtils.pwd()
+    @pwd = FileUtils.pwd()
+    @f = File.new("#{@pwd}/temp", "w")
     capture_stdout
+
   end 
 
   #first, run and listn for stdout
@@ -26,6 +27,9 @@ class Pikabu
   #binding.pry
   stdin, stdout, stderr = Open3.popen3("ruby #{@file_path}")
   error = stderr.readlines 
+  stdin.close
+  stdout.close
+  stderr.close
     if error == []
         puts "PIKABU SEES NO ERRORS IN YOUR SCRIPT" 
         puts "    O> "
@@ -38,23 +42,22 @@ class Pikabu
         puts "    ^ ^"
      else
       #binding.pry
-        puts "PIKABU SEES ALL THE ERRORS"
-        if /\d\d\d/=~ error.first
-            num = (/\d\d\d/=~ error.first)
+        if /.rb:\d\d\d/=~ error.first
+            num = (/.rb:\d\d\d/=~ error.first)+4
             @line_num = error.first[num..num+2].to_i
-        elsif /\d\d/ =~ error.first
-            num = (/\d\d/=~ error.first)
+        elsif /.rb:\d\d/ =~ error.first
+            num = (/.rb:\d\d/=~ error.first)+4
             @line_num = error.first[num..num+1].to_i
 
-        elsif /\d/=~ error.first
-            num = (/\d/=~ error.first)
+        elsif /.rb:\d/=~ error.first
+            num = (/.rb:\d/=~ error.first)+4
             @line_num = error.first[num].to_i
         else 
-          puts "oops what's going on"
+          puts "?!?"
         end
-        #ADD SOPHISTICATED EMOJIS
+        puts "\nPikabu detected an error on line #{@line_num} of #{@file_path}"
     end
-    puts "PIKABU SEES YOUR ERROR ON LINE #{@line_num}"
+    
     peek 
   end
 
@@ -63,7 +66,7 @@ class Pikabu
     line = 0
     @file.each do |l|
       if line < (@line_num-3)
-        @t.write(l)
+        @f.write(l)
         line+=1
       end 
     end 
@@ -75,7 +78,7 @@ class Pikabu
   #why does this not work if i use @file instead of reopening file?
   file.each do |l|
       if line >= (@line_num-3)
-        @t << l
+        @f << l
       end 
       line+=1
     end 
@@ -83,17 +86,17 @@ class Pikabu
 
 
   def peek
-    #binding.pry
-    @t.write ("require 'pry'\n")
+    @f.write ("require 'pry'\n")
     head
-    @t << "  binding.pry\n"
+    @f << "binding.pry\n"
     tail
-    @t.rewind
-    load @t
-    @t.close
+    @f.rewind
+    load @f 
+    File.delete("#{@pwd}/temp")
+    puts "hello"
   end
 
 end
-Pikabu.new('user_script.rb')
+#Pikabu.new('user_script.rb')
 #binding.pry
 
