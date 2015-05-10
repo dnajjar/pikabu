@@ -1,7 +1,11 @@
-
-def error
-  ERROR
-
+def chicken_run(num)
   
+num.times do 
+        puts "      O> "
+        puts "      |"
+        puts "  >OOOO"
+        puts "    ^ ^"
+      end
 end 
-error
+
+chicken_run(5)
