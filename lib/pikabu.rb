@@ -1,6 +1,7 @@
-#require "lib/pikabu/version"
 #questions: why dont we need to require pikabu?
 #how can we close file after going into the pry?
+
+require_relative "../lib/pikabu/version.rb"
 require "tempfile"
 require "fileutils"
 require "pry"
@@ -15,56 +16,28 @@ class Pikabu
     @pwd = FileUtils.pwd()
     @f = File.new("#{@pwd}/temp.rb", "w")
     capture_stdout
-
   end 
 
-  #first, run and listn for stdout
-  #if stdout includes error, get line number
-  #rerun, setting line number to line_num
-  #else, say no errors detected
-
-  
-
   def capture_stdout
-  stdin, stdout, stderr = Open3.popen3("ruby #{@file_path}")
-  error = stderr.readlines 
-  stdin.close
-  stdout.close
-  stderr.close
-    if error == []
-        puts "\nYou clever chicken! Pikabu detected no errors in your script!" 
-        puts "\n"
-        puts "    O>     O>"
-        puts "    |      |"
-        puts ">OOOO  >OOOO"
-        puts "  ^ ^    ^ ^"
-        puts "      O> "
-        puts "      |"
-        puts "  >OOOO"
-        puts "    ^ ^"
-        return
-     else
-
-        if /.rb:\d\d\d/=~ error.first
-            num = (/.rb:\d\d\d/=~ error.first)+4
-            @line_num = error.first[num..num+2].to_i
-        elsif /.rb:\d\d/ =~ error.first
-            num = (/.rb:\d\d/=~ error.first)+4
-            @line_num = error.first[num..num+1].to_i
-
-        elsif /.rb:\d/=~ error.first
-            num = (/.rb:\d/=~ error.first)+4
-            @line_num = error.first[num].to_i
-        else 
-          puts "?!?"
-        end
-        puts "\nPikabu detected an error on line #{@line_num} of #{@file_path}"
-    end
-  peek  
+    stdin, stdout, stderr = Open3.popen3("ruby #{@file_path}")
+    @error = stderr.readlines 
+      if @error == []
+          puts "\nYou clever chicken! Pikabu detected no errors in your script!" 
+          puts "\n"
+          puts "      O>    "
+          puts "      |     "
+          puts "  >OOOO     " 
+          puts "    ^ ^     "
+          return
+       else
+            m =  /.rb:(\d+)/.match(@error.first)
+            @line_num = m[1].to_i
+           puts "\nPikabu detected an error on line #{@line_num} of #{@file_path}"
+      end
+    peek  
   end
 
-
-  def head 
+  def write_head 
     line = 0
     @file.each do |l|
       if line < (@line_num-1)
@@ -74,7 +47,7 @@ class Pikabu
     end 
   end 
 
-  def tail
+  def write_tail
   line = 0
   file = File.open(@file_path)
   #why does this not work if i use @file instead of reopening file?
@@ -89,15 +62,19 @@ class Pikabu
 
   def peek
     @f.write ("require 'pry'\n")
-    head
+    write_head
     @f << "binding.pry\n"
-    tail
+    write_tail
     @f.rewind
     load @f 
     File.delete("#{@pwd}/temp")
   end
 
+  def find_error_line(num, space)
+    num +=4
+    @line_num = @error.first[num..num+space].to_i
+  end 
+
 end
-#Pikabu.new('user_script.rb')
-#binding.pry
+
 
