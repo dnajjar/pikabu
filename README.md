@@ -21,9 +21,17 @@ Or install it yourself as:
 
 ## Usage
 
-You don't ever need to require pikabu in any of your scripts. To use it, run `pikabu [file_path.rb]` from the command line. Pikabu will place a binding.pry before the first error it detects and rerun your script. 
+You don't ever need to require pikabu in any of your scripts. To use it, run
 
-You can also run `pikabu [file_path.rb] [line #]`, and pikabu will insert a binding.pry at the line number specified. 
+    $ pikabu [file_path.rb]
+
+from the command line. Pikabu will place a binding.pry before the first error it detects and rerun your script. 
+
+You can also run 
+
+    $ pikabu [file_path.rb] [line #]
+
+and pikabu will insert a binding.pry at the line number specified. 
 
 ## Contributing
 Comments and improvements are always welcome! 
