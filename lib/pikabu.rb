@@ -26,7 +26,7 @@ class Pikabu
     elsif (@line_num.to_i>@length) || (@line_num.to_i<0) || (@line_num.to_i.to_s!=@line_num)
       puts "Please try again with a line number between 0 and #{@length}"
     else 
-      @line_num = @line_num.to_i
+      @line_num = @line_num.to_i+1
       peek
     end 
   end
