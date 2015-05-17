@@ -33,6 +33,10 @@ You can also run
 
 and pikabu will insert a binding.pry at the line number specified. 
 
+## To Do 
+- Handle more complex file dependencies
+- Include error type in message to user 
+
 ## Contributing
 Comments and improvements are always welcome! 
 
