@@ -1,5 +1,5 @@
  def chicken_run(num)
- num.times do 
+ nu.times do 
         puts "      O> "
         puts "      |  "
         puts "  >OOOO  "
