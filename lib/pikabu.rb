@@ -41,10 +41,10 @@ class Pikabu
   def new_file
     path_array = @file_path.split("/")
     if path_array.length==1
-      @current_path = "#{@pwd}/temp.rb"
+      @current_path = "#{@pwd}/pikabu_temp.rb"
    else
     var = path_array[0..-2].join('/')
-    @current_path = "#{@pwd}/#{var}/temp.rb"
+    @current_path = "#{@pwd}/#{var}/pikabu_temp.rb"
    end 
    @f = File.new("#{@current_path}", "w")
   end 
