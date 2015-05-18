@@ -35,11 +35,22 @@ class Pikabu
     @file = File.open(@file_path)
     @length = File.readlines(@file_path).size
     @pwd = FileUtils.pwd()
-    @f = File.new("#{@pwd}/temp.rb", "w")
+    new_file
+  end 
+
+  def new_file
+    path_array = @file_path.split("/")
+    if path_array.length==1
+      @current_path = "#{@pwd}/temp.rb"
+   else
+    var = path_array[0..-2].join('/')
+    @current_path = "#{@pwd}/#{var}/temp.rb"
+   end 
+   @f = File.new("#{@current_path}", "w")
   end 
 
   def print_help
-    puts 'Welcome to Pikabu!'
+    puts 'Welcome to Pikabu! Please enter a command.'
     puts 'pikabu [file.rb]         : places a binding.pry if there is an error in your file'
     puts 'pikabu [file.rb] [line #]: places a binding.pry on the line number you specify'
   end
@@ -50,11 +61,7 @@ class Pikabu
       if @error == []
           puts "\nYou clever chicken! Pikabu detected no errors in your script!" 
           puts "\n"
-          puts "      O>    "
-          puts "      |     "
-          puts "  >OOOO     " 
-          puts "    ^ ^     "
-          system 'rm temp.rb'
+          exec "rm #{@current_path}"
           return
        else
           m =  /.rb:(\d+)/.match(@error.first)
@@ -91,7 +98,7 @@ class Pikabu
     @f << "binding.pry\n"
     write_tail
     @f.rewind
-    system 'ruby temp.rb; rm temp.rb'
+    system "ruby #{@current_path};rm #{@current_path}"
   end
 
 end
