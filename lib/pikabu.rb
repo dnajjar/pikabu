@@ -5,7 +5,7 @@ require "open3"
 
 class Pikabu
 
-  def initialize(file_path, line_num)
+  def initialize(file_path="", line_num=nil)
     @file_path = file_path
     @line_num = line_num
     check_file_path
@@ -15,7 +15,7 @@ class Pikabu
     begin
       load_paths
       check_line_num
-    rescue LoadError, Errno::ENOENT => e
+    rescue LoadError, Errno::ENOENT, TypeError => e
       print_help
     end
   end 
@@ -50,7 +50,8 @@ class Pikabu
   end 
 
   def print_help
-    puts 'Welcome to Pikabu! Please enter a command.'
+    puts 'Welcome to Pikabu!'
+    puts 'Please use one of the following commands:'
     puts 'pikabu [file.rb]         : places a binding.pry if there is an error in your file'
     puts 'pikabu [file.rb] [line #]: places a binding.pry on the line number you specify'
   end
