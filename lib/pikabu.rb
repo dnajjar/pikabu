@@ -1,4 +1,4 @@
-require_relative "../lib/pikabu/version.rb"
+  require_relative "../lib/pikabu/version.rb"
 require "fileutils"
 require "pry"
 require "open3"

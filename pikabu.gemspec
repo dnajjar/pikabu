@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Dana Najjar, Waruna Perera"]
   spec.email         = ["najjar.dana@gmail.com, wperera6@gmail.com"]
 
-  spec.summary       = %q{Pikabu is a gem that finds your errors for you. Please report bugs to najjar.dana at gmail.com!}
+  spec.summary       = %q{Pikabu is a gem that finds your errors for you.}
   spec.homepage      = "https://github.com/dnajjar/pikabu"
   spec.license       = "MIT License"
 
@@ -18,7 +18,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.9"
-  spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "pry"
     
 end
